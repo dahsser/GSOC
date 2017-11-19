@@ -1,0 +1,7 @@
+echo "PeruRummboGSoC2020" > /tmp/miprueba
+vi /tmp/miprueba
+#Insert Mode
+#yy 30p
+#Esc then :%s/2020/2018/g
+head -25 /tmp/miprueba | tail -11 
+find ~/ -type f -size 300M -mtime -7
