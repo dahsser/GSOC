@@ -1,4 +1,5 @@
-# Linux
-Get information about Linux
+# GSOC
+All my path to GSOC 2018 is here
 
-01_Basic_Commands: Description of commands on linux
+   * 00_Linux: A little of Linux ;)
+   * 01_C : C programming
