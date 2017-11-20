@@ -8,6 +8,9 @@ int main(int argc, char *argv[]){
     *       
     *       Los argumentos ingresados son separados por espacios y tomados 
     *       como cadenas
+    * Notas:
+    *       Son declaraciones de variables:
+    *       [modificador] <tipo> <varName> [= <valor de la variable>];
     */
     printf("%i\n", argc);
     //int i;
