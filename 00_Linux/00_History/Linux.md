@@ -3,6 +3,7 @@ In the mid-1970s UNIX was the most popular operating system worldwide.
 Unix systems exist ranging from personal computers to supercomputers.
 Linux is a freely distributable version of Unix(Minix), developed by Linus Torvalds in 1991, Linus was a student at the University of Helsinki in Finland.
 Nowadays Linus maintain the _linux kernel_ .
+On October in 1991, Linus announced the first "official" version of Linux, v0.02. Linus was able to run bash (the GNU Bourne Again Shell) and gcc (the GNU C compiler), but not much else was working.
 
 ## Who is Richard Stallman?
 Richard born in 1953, his achievements are:
