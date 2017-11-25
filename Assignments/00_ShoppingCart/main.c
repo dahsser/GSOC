@@ -8,6 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Constants */
+#define WIDTH 50
+
 /* Data Structures */
 struct Product{
   int ID;
@@ -32,13 +35,8 @@ void purcharseProduct();
 void generateBill();
 void addProduct();
 void displayAllProduct();
-
 #include "auxiliar.h"
 
-
-void showPrincipalMenu() {
-
-}
 int main(int argv, char *argc[]){
-  printNCharacters(219,30);
+  showPrincipalMenu(WIDTH);
 }
