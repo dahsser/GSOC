@@ -24,7 +24,7 @@ void addProduct(){
   printf("\tType product Quantity: ");
   scanf("%i", &newProduct.quantity);
   FILE *fp;
-  fp = fopen("product.dat","a");
+  fp = fopen("product.dat","ab");
   int id = ftell(fp)/sizeof(struct Product);
   newProduct.ID = id+1;
   printf("IDDDDDD: %d\n", id+1);
@@ -38,25 +38,25 @@ void addProduct(){
 }
 void displayAllProduct(){
   FILE *fp;
-  fp=fopen("product.dat", "r");
+  fp=fopen("product.dat", "rb");
   struct Product products[100];
   if(fp!=NULL){
     int count=0;
-    struct Product *temp;
+    struct Product temp;
     while (1) {
-      fread(temp, sizeof(struct Product), 1, fp);
+      fread(&temp, sizeof(struct Product), 1, fp);
       if(feof(fp)){
         break;
       }
-      products[count]=*temp;
+      products[count]=temp;
       count+=1;
     }
     if(count==0){
       printCenteredText("Aun no hay productos.\n", WIDTH);
     }else{
-        printf("\tID\tName\tPrice\tQuantity\n\n");
+        printf("\tID\t\tName\t\tPrice\t\tQuantity\n\n");
         for(int i=0;i<count;i++){
-          printf("\t%i\t%s\t%f\t%i\n",
+          printf("\t%i\t\t%s\t\t%f\t\t%i\n",
             products[i].ID,products[i].name,products[i].price,products[i].quantity);
         }
         printf("\n\t\tType anything and enter to get back...");
@@ -68,7 +68,7 @@ void displayAllProduct(){
     printCenteredText("Aun no hay productos.\n", WIDTH);
   }
   fclose(fp);
-  sleep(2);
+  sleep(1);
 }
 void manageProduct(){
   int option;
@@ -91,8 +91,10 @@ void manageProduct(){
     switch (option) {
       case 1:
         addProduct();
+        break;
       case 2:
         displayAllProduct();
+        break;
       case 0:
         break;
       default:
@@ -103,7 +105,19 @@ void manageProduct(){
   }
 }
 void purcharseProduct(){
-
+  while(1){
+    printf("\033[2J\033[1;1H");
+    printNCharacters((int)'=',WIDTH);
+    printf("\n");
+    printCenteredText("Product Details", WIDTH);
+    printf("\n");
+    printNCharacters((int)'=',WIDTH);
+    printf("\n");
+    char option;
+    printf("\tDo you want to purcharse? [y/N]:");
+    scanf("%c",option);
+    fflush(stdin);
+  }
 }
 void generateBill(){
 
