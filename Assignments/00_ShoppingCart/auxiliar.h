@@ -18,6 +18,7 @@ struct Bill{
 /* Auxiliars */
 void printNCharacters(char character, int times);
 void printCenteredText(char text[],int width);
+void printTextToColumn(char text[],int width);
 int showPrincipalMenu();
 void manageProduct();
 void purcharseProduct();

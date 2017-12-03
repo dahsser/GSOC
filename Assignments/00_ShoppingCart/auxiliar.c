@@ -15,6 +15,20 @@ void printCenteredText(char text[],int width){
   printf("%s",text);
   printf("\n");
 }
+
+void printTextToColumn(char text[], int width){
+  if(strlen(text)>width){
+    for(int i=0;i<width-3;i++){
+      printf("%c",text[i]);
+    }
+    printf("...");
+  }else{
+    printf("%s",text);
+    for(int i=strlen(text);i<width;i++){
+      printf(" ");
+    }
+  }
+}
 void addProduct(){
   struct Product newProduct;
   printf("\tType product name: ");
@@ -44,20 +58,31 @@ void displayAllProduct(){
     int count=0;
     struct Product temp;
     while (1) {
-      fread(&temp, sizeof(struct Product), 1, fp);
-      if(feof(fp)){
-        break;
-      }
-      products[count]=temp;
-      count+=1;
+        fread(&temp, sizeof(struct Product), 1, fp);
+        if(feof(fp)){
+            break;
+        }
+        products[count]=temp;
+        count+=1;
     }
     if(count==0){
-      printCenteredText("Aun no hay productos.\n", WIDTH);
+        printCenteredText("Aun no hay productos.\n", WIDTH);
     }else{
-        printf("\tID\t\tName\t\tPrice\t\tQuantity\n\n");
+        printf("\tID  |Name           |Price |Quantity|\n");
+        char buffer[]="";
         for(int i=0;i<count;i++){
-          printf("\t%i\t\t%s\t\t%f\t\t%i\n",
-            products[i].ID,products[i].name,products[i].price,products[i].quantity);
+            printf("\t");
+            snprintf(buffer,30,"%d", products[i].ID);
+            printTextToColumn(buffer, 4);
+            printf("|");
+            printTextToColumn(products[i].name, 15);
+            snprintf(buffer,30,"%.2f",products[i].price);
+            printf("|");
+            printTextToColumn(buffer,6);
+            printf("|");
+            snprintf(buffer,30,"%d",products[i].quantity);
+            printTextToColumn(buffer,5);
+            printf("   |\n");
         }
         printf("\n\t\tType anything and enter to get back...");
         char trash[]="  ";
@@ -115,7 +140,7 @@ void purcharseProduct(){
     printf("\n");
     char option;
     printf("\tDo you want to purcharse? [y/N]:");
-    scanf("%c",option);
+    scanf("%c",&option);
     fflush(stdin);
   }
 }
