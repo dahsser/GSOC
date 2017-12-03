@@ -41,7 +41,6 @@ void addProduct(){
   fp = fopen("product.dat","ab");
   int id = ftell(fp)/sizeof(struct Product);
   newProduct.ID = id+1;
-  printf("IDDDDDD: %d\n", id+1);
   fwrite(&newProduct,1,sizeof(struct Product),fp);
   if(fclose(fp)==0){
     printf("Success! :)");
@@ -51,49 +50,44 @@ void addProduct(){
   }
 }
 void displayAllProduct(){
-  FILE *fp;
-  fp=fopen("product.dat", "rb");
-  struct Product products[100];
-  if(fp!=NULL){
-    int count=0;
-    struct Product temp;
-    while (1) {
-        fread(&temp, sizeof(struct Product), 1, fp);
-        if(feof(fp)){
-            break;
+    FILE *fp;
+    fp=fopen("product.dat", "rb");
+    struct Product products[100];
+    if(fp!=NULL){
+        int count=0;
+        struct Product temp;
+        while (1) {
+            fread(&temp, sizeof(struct Product), 1, fp);
+            if(feof(fp)){
+                break;
+            }
+            products[count]=temp;
+            count+=1;
         }
-        products[count]=temp;
-        count+=1;
-    }
-    if(count==0){
-        printCenteredText("Aun no hay productos.\n", WIDTH);
+        if(count==0){
+            printCenteredText("Aun no hay productos.\n", WIDTH);
+        }else{
+            printf("\tID  |Name           |Price |Quantity|\n");
+            char buffer[31];
+            for(int i=0;i<count;i++){
+                printf("\t");
+                snprintf(buffer,30,"%d", products[i].ID);
+                printTextToColumn(buffer, 4);
+                printf("|");
+                printTextToColumn(products[i].name, 15);
+                snprintf(buffer,30,"%.2f",products[i].price);
+                printf("|");
+                printTextToColumn(buffer,6);
+                printf("|");
+                snprintf(buffer,30,"%d",products[i].quantity);
+                printTextToColumn(buffer,5);
+                printf("   |\n");
+            }
+        }
+        fclose(fp);
     }else{
-        printf("\tID  |Name           |Price |Quantity|\n");
-        char buffer[]="";
-        for(int i=0;i<count;i++){
-            printf("\t");
-            snprintf(buffer,30,"%d", products[i].ID);
-            printTextToColumn(buffer, 4);
-            printf("|");
-            printTextToColumn(products[i].name, 15);
-            snprintf(buffer,30,"%.2f",products[i].price);
-            printf("|");
-            printTextToColumn(buffer,6);
-            printf("|");
-            snprintf(buffer,30,"%d",products[i].quantity);
-            printTextToColumn(buffer,5);
-            printf("   |\n");
-        }
-        printf("\n\t\tType anything and enter to get back...");
-        char trash[]="  ";
-        scanf("%s",trash);
-        fflush(stdin);
+        printCenteredText("El archivo de productos no existe.\n", WIDTH);
     }
-  }else{
-    printCenteredText("Aun no hay productos.\n", WIDTH);
-  }
-  fclose(fp);
-  sleep(1);
 }
 void manageProduct(){
   int option;
@@ -119,6 +113,10 @@ void manageProduct(){
         break;
       case 2:
         displayAllProduct();
+        printf("\n\t\tType anything and enter to get back...");
+        char trash[]="";
+        scanf("%s",trash);
+        fflush(stdin);
         break;
       case 0:
         break;
@@ -138,14 +136,76 @@ void purcharseProduct(){
     printf("\n");
     printNCharacters((int)'=',WIDTH);
     printf("\n");
+    displayAllProduct();
     char option;
     printf("\tDo you want to purcharse? [y/N]:");
-    scanf("%c",&option);
-    fflush(stdin);
+    scanf(" %c",&option);
+    if(option != 'y' && option != 'Y')break;
+    while(1){
+        printf("Type the product code to purcharse: ");
+        int codigo;
+        scanf("%d",&codigo);
+        FILE *fp;
+        fp = fopen("product.dat","rb+");
+        struct Product temp;
+        int status = 0;
+        int index = 0;
+        int pos = 0;
+        while (1) {
+            fread(&temp, sizeof(struct Product), 1, fp);
+            if(feof(fp)){
+                break;
+            }
+            pos++;
+            if(temp.ID == codigo){
+                status = 1; //found
+                index = pos;
+                if(temp.quantity<=0){
+                    status = 2; // sold out
+                }
+            }
+        }
+        if(status>0){
+            if(status == 2){
+                printf("\tThis product is sold out\n");
+            }else{
+                fseek( fp, (index-1)*sizeof(struct Product), SEEK_SET );
+                fread(&temp, sizeof(struct Product), 1, fp);
+                temp.quantity--;
+                fseek( fp, (index-1)*sizeof(struct Product), SEEK_SET );
+                fwrite(&temp,1,sizeof(struct Product),fp);
+                FILE *fp2;
+                fp2 = fopen("bill.dat","ab");
+                struct Bill product;
+                product.pID = temp.ID;
+                strcpy(product.pName,temp.name);
+                product.pPrice = temp.price;
+                fwrite(&product,1,sizeof(struct Product),fp2);
+                fclose(fp2);
+                printf("\tAdded to your cart! ;)\n");
+                sleep(2);
+            }
+        }else{
+            printf("\tThis product does not exist :C\n");
+        }
+        sleep(2);
+        fclose(fp);
+        break;
+
+    }
+
   }
 }
 void generateBill(){
+    printf("\033[2J\033[1;1H");
+    printNCharacters((int)'=',WIDTH);
+    printf("\n");
+    printCenteredText("Bill Details", WIDTH);
+    printf("\n");
+    printNCharacters((int)'=',WIDTH);
+    printf("\n");
 
+    sleep(2);
 }
 int showPrincipalMenu(){
   while(1){
@@ -175,6 +235,7 @@ int showPrincipalMenu(){
         break;
       case 3:
         generateBill();
+        break;
       case 0:
         return 1;
       default:
