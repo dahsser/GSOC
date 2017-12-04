@@ -32,7 +32,7 @@ void printTextToColumn(char text[], int width){
 void addProduct(){
   struct Product newProduct;
   printf("\tType product name: ");
-  scanf("%s", newProduct.name);
+  scanf("\n%[^\n]s", newProduct.name);
   printf("\tType product Price: ");
   scanf("%f", &newProduct.price);
   printf("\tType product Quantity: ");
@@ -67,7 +67,7 @@ void displayAllProduct(){
         if(count==0){
             printCenteredText("Aun no hay productos.\n", WIDTH);
         }else{
-            printf("\t|ID  |Name           |Price |Quantity|\n");
+            printf("\t|ID  |Name           |Price   |Quantity|\n");
             char buffer[31];
             for(int i=0;i<count;i++){
                 printf("\t|");
@@ -77,7 +77,7 @@ void displayAllProduct(){
                 printTextToColumn(products[i].name, 15);
                 snprintf(buffer,30,"%.2f",products[i].price);
                 printf("|");
-                printTextToColumn(buffer,6);
+                printTextToColumn(buffer,8);
                 printf("|");
                 snprintf(buffer,30,"%d",products[i].quantity);
                 printTextToColumn(buffer,5);
@@ -127,7 +127,7 @@ void manageProduct(){
     if(option==0)break;
   }
 }
-void purcharseProduct(){
+void purchaseProduct(){
   while(1){
     printf("\033[2J\033[1;1H");
     printNCharacters((int)'=',WIDTH);
@@ -253,12 +253,12 @@ int showPrincipalMenu(){
     printf("\033[2J\033[1;1H");
     printNCharacters((int)'=',WIDTH);
     printf("\n");
-    printCenteredText("Welcome to shopping list", WIDTH);
+    printCenteredText("Welcome to shopping store", WIDTH);
     printf("\n");
     printNCharacters((int)'=',WIDTH);
     printf("\n");
     printf("\t1.- Manage Product\n");
-    printf("\t2.- Purcharse Product\n");
+    printf("\t2.- Purchase Product\n");
     printf("\t3.- Generate Bill\n");
     printf("\t0.- Exit\n\n");
     printNCharacters((int)'=',WIDTH);
@@ -272,7 +272,7 @@ int showPrincipalMenu(){
         manageProduct();
         break;
       case 2:
-        purcharseProduct();
+        purchaseProduct();
         break;
       case 3:
         generateBill();

@@ -1,7 +1,7 @@
 #ifndef AUXILIAR_H_
 #define AUXILIAR_H_
 /* Constants */
-#define WIDTH 50
+#define WIDTH 60
 /* Data Structures */
 struct Product{
   int ID;
